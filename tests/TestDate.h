@@ -1,7 +1,5 @@
 #pragma once
 
-#define DOCTEST_CONFIG_IMPLMENT
-
 #include <iostream>
 #include <sstream>
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include "Date.h"
 
 class Room {
@@ -12,6 +13,7 @@ private:
     bool _isAvailable;
     std::string _note;
 
+    void SetRoom(int, const Date&, const Date&, const std::string&, bool, int);
 public:
     Room(int);
     Room(int, int, const Date&, const Date&, const std::string&);
@@ -31,6 +33,8 @@ public:
     void CheckOut();
     int Report(const Date&, const Date&) const;
     void Unavailable(const Date&, const Date&, const std::string&);
+
+    void PrintEmptyRoom() const;
 
     friend std::ostream& operator<<(std::ostream&, const Room&);
     friend std::istream& operator>>(std::istream&, Room&);

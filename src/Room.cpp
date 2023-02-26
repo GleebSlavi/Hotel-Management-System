@@ -2,33 +2,34 @@
 
 int Room::_roomNumber = 100;
 
-Room::Room(int beds) {
+void Room::SetRoom(int beds, const Date& from, const Date& to, 
+    const std::string& note, bool isAvailable = true, int guests = 0) {
+    _beds = beds;
+    _guests = guests;
+    _accomodation = from;
+    _departure = to;
+    _note = note;
+    _isAvailable = isAvailable;
+}
+
+Room::Room(int beds = 0) {
     ++_roomNumber;
     _beds = beds;
     _guests = 0;
     _isAvailable = true;
 }
 
-Room::Room(int beds, int guests, const Date& accomodation, 
-    const Date& departure, const std::string& note) {
+Room::Room(int beds, int guests, const Date& from, 
+    const Date& to, const std::string& note) {
     ++_roomNumber;
-    _beds = beds;
-    _guests = guests;
-    _accomodation = accomodation;
-    _departure = departure;
-    _note = note;
-    _isAvailable = false;
+    SetRoom(beds, from, to, note, false, guests);
 }
 
 Room& Room::operator=(const Room& other) {
     if (this != &other) {
         _roomNumber = other._roomNumber;
-        _beds = other._beds;
-        _guests = other._guests;
-        _accomodation = other._accomodation;
-        _departure = other._departure;
-        _isAvailable = other._isAvailable;
-        _note = other._note;
+        SetRoom(other._beds, other._accomodation, other._departure,
+            other._note, other._isAvailable, other._guests);
     }
 
     return *this;
@@ -62,13 +63,10 @@ const std::string& Room::GetNote() const {
     return _note;
 }
 
-void Room::CheckIn(const Date& accomodation, const Date& departure,
+void Room::CheckIn(const Date& from, const Date& to,
     const std::string& note, int guests = -1) {
-    _accomodation = accomodation;
-    _departure = departure;
-    _note = note;
-    _isAvailable = false;
-    _guests = guests == -1 ? _beds : guests;
+    int guestsCount = guests == -1 ? _beds : guests;
+    SetRoom(_beds, from, to, _note, false, guestsCount);
 }
 
 bool Room::Availability(const Date& date) const {
@@ -94,20 +92,23 @@ int Room::Report(const Date& from, const Date& to) const {
     return (endDate - startDate) + 1;
 }
 
-void Room::Unavailable(const Date& accomodation, const Date& departure, const std::string& note) {
-    _accomodation = accomodation;
-    _departure = departure;
-    _note = note;
-    _isAvailable = false;
-    _guests = 0;
+void Room::Unavailable(const Date& from, const Date& to, const std::string& note) {
+    SetRoom(_beds, from, to, _note, false);
+}
+
+void Room::PrintEmptyRoom() const {
+    std::cout << "\n--------------------------------------------------------------"
+              << "\nRoom number: " << _roomNumber
+              << "\nBeds: " << _beds
+              << "\n--------------------------------------------------------------\n";
 }
 
 std::ostream& operator<<(std::ostream& os, const Room& room) {
-    os << room.GetBeds() << ","
+    os <<(room.GetAvailability() ? 'F' : 'O')
+       << room.GetBeds() << ","
        << room.GetGuests() << ","
        << room.GetAccomodation() << ","
        << room.GetDeparture() << ","
-       << (room.GetAvailability() ? 'F' : 'O')
        << (!room.GetNote().empty() ? "," + room.GetNote() : "");
 
     return os;
@@ -116,24 +117,28 @@ std::ostream& operator<<(std::ostream& os, const Room& room) {
 std::istream& operator>>(std::istream& is, Room& room) {
     char comma;
     int beds, guests;
-    Date accomodation, departure;
     bool isAvailable;
+    Date from, to;
     std::string note;
 
-    is >> beds >> comma
-       >> guests >> comma
-       >> accomodation >> comma
-       >> departure >> comma >> comma;
-
+    is >> comma;
     isAvailable = comma == 'F' ? true : false;
 
-    if (is.peek() == ',') {
-        is.get();
-        is >> note;
-    }
+    if (isAvailable) {
+        is >> comma >> beds;
+        room.SetRoom(beds, from, to, note);
+    } else {
+        is >> comma >> beds >> comma
+           >> guests >> comma
+           >> from >> comma
+           >> to >> comma;
 
-    Room other_room(beds, guests, accomodation, departure, note);
-    room = other_room;
+        if (is.peek() == ',') {
+            is.get();
+            std::getline(is, note, '\n');
+        }
+        room.SetRoom(beds, from, to, note, false, guests);
+    }
 
     return is;
 }
