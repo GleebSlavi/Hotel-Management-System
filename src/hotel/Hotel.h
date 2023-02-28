@@ -13,6 +13,7 @@ private:
     const std::vector<Room>& FindAvailableSuitableRooms(int, const Date&, const Date&) const;
 public:
     void AddRoom(const Room&);
+    void Clear();
 
     const std::vector<int> GetRoomNumbers() const;
     const std::vector<Room> GetRooms() const;

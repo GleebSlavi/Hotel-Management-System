@@ -18,6 +18,11 @@ void Hotel::AddRoom(const Room& room) {
     _roomNumbers.push_back(room.GetRoomNumber());
 }
 
+void Hotel::Clear() {
+    _rooms.clear();
+    _roomNumbers.clear();
+}
+
 const std::vector<int> Hotel::GetRoomNumbers() const {
     return _roomNumbers;
 }
