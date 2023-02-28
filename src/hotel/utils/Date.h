@@ -9,7 +9,6 @@ private:
     int _month;
     int _year;
 
-    bool IsValidDate(int, int, int) const;
     bool IsValidDay(int, int, int) const;
     bool IsLeapYear(int) const;
     int GetDaysInMonth(int, int) const;
@@ -34,6 +33,7 @@ public:
     bool operator<=(const Date&) const;
     int operator-(const Date&) const;
 
+    bool IsValidDate(int, int, int) const;
     const std::string& ToString() const;
 
     friend std::ostream& operator<<(std::ostream&, const Date&);

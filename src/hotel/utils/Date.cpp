@@ -26,10 +26,6 @@ bool Date::IsValidDay(int day, int month, int year) const {
     return day >= 1 && day <= GetDaysInMonth(month, year);
 }
 
-bool Date::IsValidDate(int day, int month, int year) const{
-    return year >= 2023 && (month >= 1 && month <= 12) && IsValidDay(day, month, year);
-}
-
 int Date::ToDays() const {
     long long days = 0;
 
@@ -121,6 +117,10 @@ int Date::operator-(const Date& other) const {
     const Date& laterDate = (*this < other) ? other : *this;
 
     return laterDate.ToDays() - earlierDate.ToDays();
+}
+
+bool Date::IsValidDate(int day, int month, int year) const{
+    return year >= 2023 && (month >= 1 && month <= 12) && IsValidDay(day, month, year);
 }
 
 const std::string& Date::ToString() const {
