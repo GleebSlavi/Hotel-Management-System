@@ -1,6 +1,6 @@
 #include "Hotel.h";
 
-const std::vector<Room> Hotel::FindAvailableSuitableRooms(int beds, const Date& from, const Date& to) const {
+const std::vector<Room>& Hotel::FindAvailableSuitableRooms(int beds, const Date& from, const Date& to) const {
     std::vector<Room> freeRooms;
 
     size_t roomsCount = _rooms.size();
@@ -11,6 +11,19 @@ const std::vector<Room> Hotel::FindAvailableSuitableRooms(int beds, const Date& 
     }
     
     return freeRooms;
+}
+
+void Hotel::AddRoom(const Room& room) {
+    _rooms.push_back(room);
+    _roomNumbers.push_back(room.GetRoomNumber());
+}
+
+const std::vector<int> Hotel::GetRoomNumbers() const {
+    return _roomNumbers;
+}
+
+const std::vector<Room> Hotel::GetRooms() const {
+    return _rooms;
 }
 
 void Hotel::CheckIn(int room, const Date& from, const Date& to, const std::string& note, int guests = -1) {
@@ -91,3 +104,27 @@ void Hotel::Unavailable(int room, const Date& from, const Date& to, const std::s
     }
 }
 
+std::ostream& operator<<(std::ostream& os, const Hotel& hotel) {
+    const std::vector<Room> rooms = hotel.GetRooms();
+    size_t roomsCount = rooms.size();
+
+    for(size_t i = 0; i < roomsCount; ++i) {
+        os << rooms[i] << "\n";
+    }
+
+    return os;
+}
+
+std::istream& operator>>(std::istream& is, Hotel& hotel) {
+    std::string line;
+    while(std::getline(is, line, '\n')) {
+        std::stringstream ss(line);
+
+        Room room;
+        ss >> room;
+    
+        hotel.AddRoom(room);
+    }
+
+    return is;
+}

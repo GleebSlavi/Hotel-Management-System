@@ -140,6 +140,7 @@ std::istream& operator>>(std::istream& is, Room& room) {
         if (is.peek() == ',') {
             is.get();
             std::getline(is, note, '\n');
+            note.pop_back();
         }
         room.SetRoom(beds, from, to, note, false, guests);
     }

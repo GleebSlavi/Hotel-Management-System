@@ -4,7 +4,7 @@
 #include <sstream>
 
 #include "doctest.h"
-#include "../src/Date.h"
+#include "../src/hotel/utils/Date.h"
 
 TEST_CASE("Invalid date passed") {
     Date d(30, 2, 2023);
