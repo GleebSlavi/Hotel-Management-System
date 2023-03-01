@@ -21,7 +21,6 @@ bool CommandLine::IsValidRoomNumber(int roomNumber) const {
     return false;
 }
 
-
 void CommandLine::Open() {
     std::fstream file(_fileName, std::ios::out);
 
@@ -70,7 +69,7 @@ void CommandLine::Help() const {
               << "help                                                    print commands information\n"
               << "exit                                                    exits the program\n"
               << "checkin <room> <from> <to> <note> [<guests>]            registers a room with number <room> from date <from> to date <to> and adds note <note>, if optional parameter <guests> is not inputed it equals the beds in the room\n"           
-              << "availability [<date>]                                   shows a list of all available rooms on date <date>, if <date> is not inputed it uses today's date\n"
+              << "availability <date>                                     shows a list of all available rooms on date <date>\n"
               << "checkout <room>                                         leaves occupied room with number <room>\n"
               << "report <from> <to>                                      shows a list, that for every used room in the interval <from>-<to>, shows how many days a room was used\n"
               << "find <beds> <from> <to>                                 finds a suitable free room in the interval <from>-<to> with at least <beds> beds\n"
@@ -116,11 +115,7 @@ void CommandLine::Availability() const {
     std::cin >> std::ws;
 
     Date date;
-    if (std::cin.peek() != EOF) {
-        std::cin >> date;
-    } else {
-
-    }
+    std::cin >> date;
 
     if (!_hotel.Availability(date)) {
         std::cout << "There are no available rooms on " << date << "\n";

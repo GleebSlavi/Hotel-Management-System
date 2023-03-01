@@ -18,7 +18,7 @@ public:
     const std::vector<int> GetRoomNumbers() const;
     const std::vector<Room> GetRooms() const;
 
-    void CheckIn(int, const Date&, const Date&, const std::string&, int);
+    void CheckIn(int, const Date&, const Date&, const std::string&, int guests = -1);
     bool Availability(const Date&) const;
     void CheckOut(int);
     bool Report(const Date&, const Date&) const;

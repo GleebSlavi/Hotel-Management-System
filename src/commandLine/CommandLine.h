@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <chrono>
+#include <iomanip>
 
 #include "../hotel/Hotel.h"
 
@@ -15,7 +16,7 @@ private:
     bool IsOpened() const;
     bool IsValidRoomNumber(int) const;
     const std::string GetTodaysDate() const;
-public:
+
     void Open();
     void Close();
     void Save(const std::string&);
@@ -26,6 +27,6 @@ public:
     void CheckOut();
     void Report() const;
     void Find() const;
-
+public:
     void Run();
 };
